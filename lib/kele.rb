@@ -10,17 +10,6 @@ class Kele
     'https://www.bloc.io/api/v1'
   end
 
-  def message
-    @messages_format = {
-      sender: sender,
-      recipient_id: recipient,
-      token: string,
-      subject: subject,
-      stripped_text: text
-    }
-  end
-
-
   def initialize(email, password)
     @options = {
       email: email,
@@ -44,13 +33,19 @@ class Kele
     JSON.parse(response.body)
   end
 
-  def get_messages(page)
-    response = self.class.get("#{base_uri}/#{page}", headers: {"authorization" => @auth_token})
+  def get_messages(message_threads)
+    response = self.class.get("#{base_uri}/message_threads", headers: {"authorization" => @auth_token})
     JSON.parse(response.body)
   end
 
-  def create_messages(messages_format)
-    response = self.class.post("#{base_uri}/messages", @messages_format, headers: {"authorization" => @auth_token})
+  def create_messages(sender, recipient_id, subject, token, stripped_text)
+    response = self.class.post("#{base_uri}/messages", body: {
+      "sender": sender,
+      "recipient_id": recipient_id,
+      "subject": subject,
+      "token": string,
+      "stripped-text": stripped-text
+      }, headers: {"authorization" => @auth_token})
   end
 
 
