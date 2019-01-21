@@ -2,7 +2,7 @@ require 'httparty'
 require 'json'
 require_relative 'roadmap'
 
-
+user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36'
 class Kele
   include HTTParty
   include Roadmap
@@ -16,7 +16,12 @@ class Kele
       password: password
 
     }
-    response = self.class.post("#{base_uri}/sessions", @options)
+    p "#{base_uri}/sessions"
+    p @options
+
+    response = self.class.post("#{base_uri}/sessions", :body => @options.to_json, :headers => {'Content-Type' => 'application/json' })
+    puts "Response:"
+    p response
     @auth_token = response["auth_token"]
     if @auth_token.nil?
       puts "Sorry, invalid credentials."
@@ -34,9 +39,15 @@ class Kele
   end
 
   def get_messages(page_number)
+    if page_number == nil
+      response = self.class.get("#{base_uri}/message_threads", body: {}, headers: {"authorization" => @auth_token})
+    else
     response = self.class.get("#{base_uri}/message_threads", body: {
-      "page": page_number},
+      "page": page_number
+    },
       headers: {"authorization" => @auth_token})
+    end
+
     JSON.parse(response.body)
   end
 
