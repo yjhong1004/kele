@@ -33,7 +33,7 @@ class Kele
     JSON.parse(response.body)
   end
 
-  def get_messages(message_threads)
+  def get_messages(page_number)
     response = self.class.get("#{base_uri}/message_threads", body: {
       "page": page_number},
       headers: {"authorization" => @auth_token})
