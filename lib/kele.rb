@@ -1,6 +1,6 @@
 require 'httparty'
 require 'json'
-require 'lib/roadmap.rb'
+require_relative 'roadmap'
 
 
 class Kele
