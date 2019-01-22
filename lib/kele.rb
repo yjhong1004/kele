@@ -44,8 +44,7 @@ class Kele
     else
     response = self.class.get("#{base_uri}/message_threads", body: {
       "page": page_number
-    },
-      headers: {"authorization" => @auth_token})
+    }, headers: {"authorization" => @auth_token})
     end
 
     JSON.parse(response.body)
